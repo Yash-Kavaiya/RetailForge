@@ -1,0 +1,39 @@
+[
+  {
+    "code": "KIT15",
+    "description": "15% off when you build a complete camping kit (4+ items).",
+    "type": "percent",
+    "value": 15,
+    "min_items": 4,
+    "applies_to": ["Camping", "Accessories"],
+    "active": true
+  },
+  {
+    "code": "WELCOME10",
+    "description": "10% off your first order.",
+    "type": "percent",
+    "value": 10,
+    "min_items": 1,
+    "applies_to": [],
+    "active": true
+  },
+  {
+    "code": "GEARUP25",
+    "description": "$25 off orders over $200.",
+    "type": "fixed",
+    "value": 25,
+    "min_subtotal": 200,
+    "applies_to": [],
+    "active": true
+  },
+  {
+    "code": "GOLD20",
+    "description": "Gold loyalty members get 20% off Outerwear.",
+    "type": "percent",
+    "value": 20,
+    "min_items": 1,
+    "applies_to": ["Outerwear"],
+    "loyalty_tier": "Gold",
+    "active": true
+  }
+]

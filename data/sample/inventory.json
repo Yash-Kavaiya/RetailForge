@@ -1,0 +1,20 @@
+[
+  { "sku": "RF-OUT-001", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 24, "reorder_level": 8, "aisle": "A1" },
+  { "sku": "RF-OUT-002", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 11, "reorder_level": 6, "aisle": "A1" },
+  { "sku": "RF-OUT-003", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 40, "reorder_level": 12, "aisle": "A2" },
+  { "sku": "RF-FOO-001", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 15, "reorder_level": 6, "aisle": "B1" },
+  { "sku": "RF-FOO-002", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 22, "reorder_level": 8, "aisle": "B1" },
+  { "sku": "RF-CMP-001", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 7, "reorder_level": 4, "aisle": "C1" },
+  { "sku": "RF-CMP-002", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 18, "reorder_level": 6, "aisle": "C1" },
+  { "sku": "RF-CMP-003", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 13, "reorder_level": 6, "aisle": "C2" },
+  { "sku": "RF-CMP-004", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 30, "reorder_level": 10, "aisle": "C3" },
+  { "sku": "RF-CMP-005", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 16, "reorder_level": 6, "aisle": "C3" },
+  { "sku": "RF-ACC-001", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 35, "reorder_level": 12, "aisle": "D1" },
+  { "sku": "RF-ACC-002", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 28, "reorder_level": 10, "aisle": "D1" },
+  { "sku": "RF-ACC-003", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 9, "reorder_level": 5, "aisle": "D2" },
+  { "sku": "RF-BAG-001", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 6, "reorder_level": 4, "aisle": "E1" },
+  { "sku": "RF-BAG-002", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 20, "reorder_level": 8, "aisle": "E1" },
+  { "sku": "RF-ELE-001", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 14, "reorder_level": 6, "aisle": "F1" },
+  { "sku": "RF-ELE-002", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 26, "reorder_level": 10, "aisle": "F1" },
+  { "sku": "RF-ACC-004", "store_id": "STORE-DOWNTOWN", "qty_on_hand": 3, "reorder_level": 8, "aisle": "D3" }
+]

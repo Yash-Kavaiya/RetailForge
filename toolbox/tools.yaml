@@ -1,0 +1,362 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# RetailForge — MCP Toolbox for Databases configuration
+# Docs: https://googleapis.github.io/genai-toolbox/
+#
+# This file defines ALL MongoDB operations the agents can perform. The agents
+# never open a MongoDB connection directly — every read/write goes through the
+# Toolbox tools defined here (this is the "meaningful MCP integration" layer).
+#
+# Run locally:  ./toolbox --tools-file tools.yaml --address 0.0.0.0 --port 5000
+# MONGODB_URI is read from the environment and substituted into the source below.
+# ─────────────────────────────────────────────────────────────────────────────
+
+sources:
+  retailforge-mongodb:
+    kind: mongodb
+    uri: ${MONGODB_URI}
+
+tools:
+  # ── Product discovery ──────────────────────────────────────────────────────
+  find-similar-products:
+    kind: mongodb-aggregate
+    source: retailforge-mongodb
+    database: retailforge
+    collection: products
+    readOnly: true
+    canonical: false
+    description: >-
+      Semantic product search via Atlas Vector Search. Returns products most
+      similar to a query embedding vector. Invoked by the search_products tool
+      (which generates the embedding) — not called directly by the model.
+    pipelinePayload: |
+      [
+        {
+          "$vectorSearch": {
+            "index": "products_vector_index",
+            "path": "embedding",
+            "queryVector": {{json .queryVector}},
+            "numCandidates": {{json .num_candidates}},
+            "limit": {{json .limit}}
+          }
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "sku": 1,
+            "name": 1,
+            "description": 1,
+            "category": 1,
+            "brand": 1,
+            "price": 1,
+            "attributes": 1,
+            "tags": 1,
+            "image_url": 1,
+            "score": { "$meta": "vectorSearchScore" }
+          }
+        }
+      ]
+    pipelineParams:
+      - name: queryVector
+        type: array
+        description: The query embedding vector (3072 floats).
+        items:
+          name: component
+          type: float
+          description: A single vector component.
+      - name: num_candidates
+        type: integer
+        description: Number of candidates to consider during the ANN search.
+        default: 100
+      - name: limit
+        type: integer
+        description: Maximum number of products to return.
+        default: 5
+
+  get-product:
+    kind: mongodb-find-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: products
+    description: Get the full details of a single product by its SKU.
+    filterPayload: |
+      { "sku": {{json .sku}} }
+    filterParams:
+      - name: sku
+        type: string
+        description: The product SKU, e.g. "RF-OUT-001".
+    projectPayload: |
+      { "embedding": 0 }
+
+  list-products-by-category:
+    kind: mongodb-find
+    source: retailforge-mongodb
+    database: retailforge
+    collection: products
+    description: List products in a given category (e.g. Outerwear, Footwear, Camping, Backpacks, Accessories, Electronics).
+    filterPayload: |
+      { "category": {{json .category}} }
+    filterParams:
+      - name: category
+        type: string
+        description: The product category to list.
+    projectPayload: |
+      { "embedding": 0 }
+    limit: 25
+
+  list-products-by-categories:
+    kind: mongodb-find
+    source: retailforge-mongodb
+    database: retailforge
+    collection: products
+    description: List products across several categories. Used to assemble bundles/kits.
+    filterPayload: |
+      { "category": { "$in": {{json .categories}} } }
+    filterParams:
+      - name: categories
+        type: array
+        description: A list of product categories to include.
+        items:
+          name: category
+          type: string
+          description: A product category.
+    projectPayload: |
+      { "embedding": 0 }
+    limit: 50
+
+  # ── Inventory ──────────────────────────────────────────────────────────────
+  check-inventory:
+    kind: mongodb-find-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: inventory
+    description: Check current store stock (qty_on_hand) and aisle for a product SKU.
+    filterPayload: |
+      { "sku": {{json .sku}} }
+    filterParams:
+      - name: sku
+        type: string
+        description: The product SKU to check stock for.
+
+  decrement-inventory:
+    kind: mongodb-update-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: inventory
+    canonical: true
+    description: Decrement on-hand stock for a SKU by a quantity (used when an order is created).
+    filterPayload: |
+      { "sku": {{json .sku}} }
+    filterParams:
+      - name: sku
+        type: string
+        description: The product SKU.
+    updatePayload: |
+      { "$inc": { "qty_on_hand": {{json .delta}} } }
+    updateParams:
+      - name: delta
+        type: integer
+        description: The signed change to apply (negative to reduce stock).
+
+  # ── Recommendations / social signals ───────────────────────────────────────
+  get-trending-products:
+    kind: mongodb-aggregate
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    readOnly: true
+    canonical: false
+    description: Return the best-selling products overall, ranked by total units sold across all orders.
+    pipelinePayload: |
+      [
+        { "$unwind": "$items" },
+        { "$group": {
+            "_id": "$items.sku",
+            "name": { "$first": "$items.name" },
+            "units_sold": { "$sum": "$items.qty" }
+        }},
+        { "$sort": { "units_sold": -1 } },
+        { "$limit": {{json .limit}} }
+      ]
+    pipelineParams:
+      - name: limit
+        type: integer
+        description: Maximum number of trending products to return.
+        default: 5
+
+  also-bought:
+    kind: mongodb-aggregate
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    readOnly: true
+    canonical: false
+    description: >-
+      "Customers who bought X also bought Y" — given a SKU, find products
+      frequently purchased in the same orders, ranked by co-purchase count.
+    pipelinePayload: |
+      [
+        { "$match": { "items.sku": {{json .sku}} } },
+        { "$unwind": "$items" },
+        { "$match": { "items.sku": { "$ne": {{json .sku}} } } },
+        { "$group": {
+            "_id": "$items.sku",
+            "name": { "$first": "$items.name" },
+            "co_purchases": { "$sum": 1 }
+        }},
+        { "$sort": { "co_purchases": -1 } },
+        { "$limit": {{json .limit}} }
+      ]
+    pipelineParams:
+      - name: sku
+        type: string
+        description: The anchor product SKU.
+      - name: limit
+        type: integer
+        description: Maximum number of related products to return.
+        default: 5
+
+  # ── Orders / customer support ──────────────────────────────────────────────
+  get-order:
+    kind: mongodb-find-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    description: Get the status and details of an order by its order_id (e.g. "ORD-5001").
+    filterPayload: |
+      { "order_id": {{json .order_id}} }
+    filterParams:
+      - name: order_id
+        type: string
+        description: The order id, e.g. "ORD-5001".
+
+  get-user-orders:
+    kind: mongodb-find
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    description: List all orders for a given user_id, most recent first.
+    filterPayload: |
+      { "user_id": {{json .user_id}} }
+    filterParams:
+      - name: user_id
+        type: string
+        description: The user id, e.g. "USER-1001".
+    sortPayload: |
+      { "created_at": -1 }
+    limit: 25
+
+  update-order-status:
+    kind: mongodb-update-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    canonical: true
+    description: Update the status of an order (e.g. processing, shipped, delivered, cancelled).
+    filterPayload: |
+      { "order_id": {{json .order_id}} }
+    filterParams:
+      - name: order_id
+        type: string
+        description: The order id to update.
+    updatePayload: |
+      { "$set": { "status": {{json .new_status}} } }
+    updateParams:
+      - name: new_status
+        type: string
+        description: The new order status.
+
+  process-refund:
+    kind: mongodb-update-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    canonical: true
+    description: Mark an order as refunded and record the refund amount and reason.
+    filterPayload: |
+      { "order_id": {{json .order_id}} }
+    filterParams:
+      - name: order_id
+        type: string
+        description: The order id to refund.
+    updatePayload: |
+      {
+        "$set": {
+          "status": "refunded",
+          "refund": {
+            "amount": {{json .amount}},
+            "reason": {{json .reason}},
+            "processed": true
+          }
+        }
+      }
+    updateParams:
+      - name: amount
+        type: float
+        description: The refund amount in dollars.
+      - name: reason
+        type: string
+        description: The reason for the refund.
+
+  insert-order:
+    kind: mongodb-insert-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: orders
+    canonical: true
+    description: Insert a fully-formed order document. Called by the create_order tool, not directly by the model.
+
+  # ── Promotions / billing ───────────────────────────────────────────────────
+  get-promotion:
+    kind: mongodb-find-one
+    source: retailforge-mongodb
+    database: retailforge
+    collection: promotions
+    description: Look up a promotion/discount by its code (e.g. "KIT15").
+    filterPayload: |
+      { "code": {{json .code}} }
+    filterParams:
+      - name: code
+        type: string
+        description: The promotion code.
+
+  list-active-promotions:
+    kind: mongodb-find
+    source: retailforge-mongodb
+    database: retailforge
+    collection: promotions
+    description: List all currently active promotions and discount codes.
+    filterPayload: |
+      { "active": true }
+    limit: 25
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Toolsets grouped per agent. Only LLM-facing tools are listed here; the
+# write/vector tools used programmatically by native FunctionTools
+# (find-similar-products, insert-order, decrement-inventory) are intentionally
+# loaded individually in Python, not exposed for the model to call raw.
+# ─────────────────────────────────────────────────────────────────────────────
+toolsets:
+  product-toolset:
+    - get-product
+    - list-products-by-category
+    - check-inventory
+
+  recommendation-toolset:
+    - get-trending-products
+    - also-bought
+    - get-user-orders
+    - get-product
+
+  support-toolset:
+    - get-order
+    - get-user-orders
+    - get-product
+    - update-order-status
+    - process-refund
+
+  billing-toolset:
+    - get-promotion
+    - list-active-promotions
+    - list-products-by-categories
+    - check-inventory
+    - get-product

@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars and fill in. Do NOT commit the real file.
+project_id     = "your-gcp-project-id"
+region         = "us-central1"
+mongodb_uri    = "mongodb+srv://user:pass@cluster.mongodb.net/?retryWrites=true&w=majority"
+google_api_key = "your-gemini-api-key"
+
+# Built by deployment/deploy.sh (Cloud Build) — override if you push manually.
+toolbox_image  = "us-central1-docker.pkg.dev/your-gcp-project-id/retailforge/toolbox:latest"
+backend_image  = "us-central1-docker.pkg.dev/your-gcp-project-id/retailforge/backend:latest"
+frontend_image = "us-central1-docker.pkg.dev/your-gcp-project-id/retailforge/frontend:latest"

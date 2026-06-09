@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+html,
+body {
+  max-width: 100vw;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
+
+/* Give the CopilotKit sidebar a brand accent. */
+.copilotKitWindow {
+  --copilot-kit-primary-color: #059669;
+}

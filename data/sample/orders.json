@@ -1,0 +1,56 @@
+[
+  {
+    "order_id": "ORD-5001",
+    "user_id": "USER-1001",
+    "status": "delivered",
+    "created_at": "2026-04-12T15:30:00Z",
+    "items": [
+      { "sku": "RF-CMP-001", "name": "Horizon 2P Three-Season Tent", "qty": 1, "price": 229.0 },
+      { "sku": "RF-CMP-002", "name": "Dreamloft -7C Mummy Sleeping Bag", "qty": 1, "price": 119.0 }
+    ],
+    "total": 348.0,
+    "shipping_address": "120 Pine St, Boulder, CO",
+    "refund": null
+  },
+  {
+    "order_id": "ORD-5002",
+    "user_id": "USER-1001",
+    "status": "shipped",
+    "created_at": "2026-05-28T09:05:00Z",
+    "items": [
+      { "sku": "RF-OUT-001", "name": "Stormshield 2.5L Waterproof Rain Jacket", "qty": 1, "price": 89.0 },
+      { "sku": "RF-ACC-002", "name": "PureFlow Squeeze Water Filter", "qty": 1, "price": 34.0 }
+    ],
+    "total": 123.0,
+    "shipping_address": "120 Pine St, Boulder, CO",
+    "refund": null
+  },
+  {
+    "order_id": "ORD-5003",
+    "user_id": "USER-1002",
+    "status": "processing",
+    "created_at": "2026-06-05T18:42:00Z",
+    "items": [
+      { "sku": "RF-FOO-002", "name": "Swiftpath Trail Running Shoes", "qty": 1, "price": 119.0 },
+      { "sku": "RF-BAG-002", "name": "Trailmate 18L Hydration Daypack", "qty": 1, "price": 79.0 }
+    ],
+    "total": 198.0,
+    "shipping_address": "44 Market Ave, Portland, OR",
+    "refund": null
+  },
+  {
+    "order_id": "ORD-5004",
+    "user_id": "USER-1003",
+    "status": "delivered",
+    "created_at": "2026-03-20T12:00:00Z",
+    "items": [
+      { "sku": "RF-CMP-001", "name": "Horizon 2P Three-Season Tent", "qty": 1, "price": 229.0 },
+      { "sku": "RF-CMP-004", "name": "Blaze Compact Backpacking Stove", "qty": 1, "price": 44.0 },
+      { "sku": "RF-CMP-005", "name": "Mess Pro Anodized Cookware Set", "qty": 1, "price": 54.0 },
+      { "sku": "RF-ACC-001", "name": "Lumen 400 Rechargeable Headlamp", "qty": 2, "price": 39.0 }
+    ],
+    "total": 405.0,
+    "shipping_address": "9 Lakeview Rd, Austin, TX",
+    "refund": null
+  }
+]

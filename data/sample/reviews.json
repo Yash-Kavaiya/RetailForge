@@ -1,0 +1,12 @@
+[
+  { "sku": "RF-OUT-001", "user_id": "USER-1002", "rating": 5, "text": "Kept me bone dry on a stormy ridge. Packs down tiny." },
+  { "sku": "RF-OUT-001", "user_id": "USER-1003", "rating": 4, "text": "Great jacket, wish it came in more colors." },
+  { "sku": "RF-CMP-001", "user_id": "USER-1001", "rating": 5, "text": "Easy to pitch and roomy for two. Survived a windy night." },
+  { "sku": "RF-CMP-002", "user_id": "USER-1001", "rating": 4, "text": "Warm down to freezing. A little bulky but cozy." },
+  { "sku": "RF-FOO-001", "user_id": "USER-1003", "rating": 5, "text": "Best boots I've owned. No blisters on a 20km day." },
+  { "sku": "RF-FOO-002", "user_id": "USER-1002", "rating": 5, "text": "Grippy and light, perfect for technical trails." },
+  { "sku": "RF-ACC-001", "user_id": "USER-1003", "rating": 5, "text": "Bright and the USB-C charging is so convenient." },
+  { "sku": "RF-ACC-002", "user_id": "USER-1001", "rating": 4, "text": "Fast flow and easy to use. Clean water anywhere." },
+  { "sku": "RF-BAG-001", "user_id": "USER-1001", "rating": 5, "text": "Carries heavy loads comfortably. The hip belt is excellent." },
+  { "sku": "RF-CMP-004", "user_id": "USER-1003", "rating": 4, "text": "Boils water fast and packs into the mug. Solid stove." }
+]

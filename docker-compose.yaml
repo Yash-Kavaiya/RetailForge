@@ -1,0 +1,54 @@
+# Local one-command stack: MCP Toolbox + AG-UI backend + read API + storefront.
+# Requires a .env file at the repo root (copy from .env.example) with MONGODB_URI
+# and GOOGLE_API_KEY set. Vector search requires a MongoDB Atlas cluster.
+#
+#   docker compose up --build
+#   open http://localhost:3000
+
+services:
+  toolbox:
+    image: us-central1-docker.pkg.dev/database-toolbox/toolbox/toolbox:latest
+    command: ["--tools-file", "/config/tools.yaml", "--address", "0.0.0.0", "--port", "5000"]
+    env_file: .env
+    volumes:
+      - ./toolbox:/config:ro
+    ports:
+      - "5000:5000"
+
+  backend:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.backend
+    env_file: .env
+    environment:
+      TOOLBOX_URL: "http://toolbox:5000"
+      FRONTEND_ORIGINS: "http://localhost:3000"
+    depends_on:
+      - toolbox
+    ports:
+      - "8000:8000"
+
+  read-api:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.backend
+    command: ["sh", "-c", "uvicorn app.read_api:app --host 0.0.0.0 --port 8001"]
+    env_file: .env
+    environment:
+      PORT: "8001"
+      FRONTEND_ORIGINS: "http://localhost:3000"
+    ports:
+      - "8001:8001"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.frontend
+    environment:
+      AGUI_BACKEND_URL: "http://backend:8000/"
+      READ_API_URL: "http://read-api:8001"
+    depends_on:
+      - backend
+      - read-api
+    ports:
+      - "3000:3000"

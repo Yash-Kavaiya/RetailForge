@@ -1,0 +1,200 @@
+[
+  {
+    "sku": "RF-OUT-001",
+    "name": "Stormshield 2.5L Waterproof Rain Jacket",
+    "description": "Fully seam-sealed 2.5-layer waterproof shell with pit zips and an adjustable storm hood. Packs into its own pocket. Ideal for hiking and travel in wet, windy conditions.",
+    "category": "Outerwear",
+    "brand": "Northpeak",
+    "price": 89.0,
+    "attributes": { "color": "Slate Blue", "gender": "Unisex", "season": "All-Season", "weight_g": 320, "waterproof": true },
+    "tags": ["rain", "waterproof", "jacket", "shell", "hiking", "lightweight"],
+    "image_url": "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600"
+  },
+  {
+    "sku": "RF-OUT-002",
+    "name": "Summit 800 Down Insulated Jacket",
+    "description": "Lightweight 800-fill responsibly sourced down jacket for cold-weather camping and alpine starts. Highly compressible with an insulated hood.",
+    "category": "Outerwear",
+    "brand": "Northpeak",
+    "price": 179.0,
+    "attributes": { "color": "Ember Orange", "gender": "Unisex", "season": "Winter", "weight_g": 410, "fill_power": 800 },
+    "tags": ["down", "insulated", "warm", "winter", "jacket", "packable"],
+    "image_url": "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=600"
+  },
+  {
+    "sku": "RF-OUT-003",
+    "name": "Basecamp Merino Wool Base Layer Top",
+    "description": "Soft 100% merino wool long-sleeve base layer that regulates temperature and resists odor on multi-day trips. Wear next to skin under a shell or down jacket.",
+    "category": "Outerwear",
+    "brand": "Trailhead",
+    "price": 64.0,
+    "attributes": { "color": "Charcoal", "gender": "Unisex", "season": "All-Season", "weight_g": 180, "material": "Merino Wool" },
+    "tags": ["base layer", "merino", "wool", "thermal", "layering"],
+    "image_url": "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600"
+  },
+  {
+    "sku": "RF-FOO-001",
+    "name": "Ridgeline GTX Waterproof Hiking Boots",
+    "description": "Waterproof leather hiking boots with a Vibram outsole and ankle support for rough terrain. Breathable membrane keeps feet dry on stream crossings.",
+    "category": "Footwear",
+    "brand": "Trailhead",
+    "price": 149.0,
+    "attributes": { "color": "Brown", "gender": "Men", "season": "All-Season", "waterproof": true, "size_range": "7-13" },
+    "tags": ["boots", "hiking", "waterproof", "footwear", "vibram", "ankle support"],
+    "image_url": "https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=600"
+  },
+  {
+    "sku": "RF-FOO-002",
+    "name": "Swiftpath Trail Running Shoes",
+    "description": "Lightweight, breathable trail runners with aggressive lugs for grip on technical singletrack. Rock plate protects underfoot on long efforts.",
+    "category": "Footwear",
+    "brand": "Velocity",
+    "price": 119.0,
+    "attributes": { "color": "Lime/Black", "gender": "Unisex", "season": "Summer", "weight_g": 280, "size_range": "6-13" },
+    "tags": ["trail running", "shoes", "lightweight", "footwear", "grip"],
+    "image_url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"
+  },
+  {
+    "sku": "RF-CMP-001",
+    "name": "Horizon 2P Three-Season Tent",
+    "description": "Freestanding two-person backpacking tent with two doors and vestibules. Weighs just 1.9 kg packed and pitches in minutes. A complete shelter for weekend trips.",
+    "category": "Camping",
+    "brand": "Northpeak",
+    "price": 229.0,
+    "attributes": { "color": "Green", "capacity": 2, "season": "3-Season", "weight_g": 1900, "waterproof": true },
+    "tags": ["tent", "shelter", "camping", "backpacking", "2-person"],
+    "image_url": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600"
+  },
+  {
+    "sku": "RF-CMP-002",
+    "name": "Dreamloft -7C Mummy Sleeping Bag",
+    "description": "Warm synthetic mummy sleeping bag rated to -7C with a draft collar and contoured hood. Compresses into the included stuff sack for easy packing.",
+    "category": "Camping",
+    "brand": "Trailhead",
+    "price": 119.0,
+    "attributes": { "color": "Teal", "temp_rating_c": -7, "season": "3-Season", "weight_g": 1300, "shape": "Mummy" },
+    "tags": ["sleeping bag", "camping", "warm", "mummy", "synthetic"],
+    "image_url": "https://images.unsplash.com/photo-1510312305653-8ed496efae75?w=600"
+  },
+  {
+    "sku": "RF-CMP-003",
+    "name": "Cloudbase Inflatable Sleeping Pad",
+    "description": "Insulated inflatable sleeping pad with an R-value of 4.2 for comfort on cold ground. Inflates in under two minutes with the integrated pump sack.",
+    "category": "Camping",
+    "brand": "Trailhead",
+    "price": 89.0,
+    "attributes": { "color": "Orange", "r_value": 4.2, "season": "3-Season", "weight_g": 480, "thickness_cm": 7 },
+    "tags": ["sleeping pad", "mattress", "camping", "insulated", "inflatable"],
+    "image_url": "https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=600"
+  },
+  {
+    "sku": "RF-CMP-004",
+    "name": "Blaze Compact Backpacking Stove",
+    "description": "Ultralight canister stove that boils a litre of water in about three minutes. Folds small enough to fit inside a mug. Reliable for trailside meals and coffee.",
+    "category": "Camping",
+    "brand": "Velocity",
+    "price": 44.0,
+    "attributes": { "color": "Silver", "fuel": "Canister", "weight_g": 73, "boil_time_min": 3 },
+    "tags": ["stove", "cooking", "camping", "ultralight", "backpacking"],
+    "image_url": "https://images.unsplash.com/photo-1571687949921-1306bfb24b72?w=600"
+  },
+  {
+    "sku": "RF-CMP-005",
+    "name": "Mess Pro Anodized Cookware Set",
+    "description": "Two-pot hard-anodized aluminium cookware set with folding handles and a strainer lid. Nests together with a stove and fuel inside for a tidy kitchen kit.",
+    "category": "Camping",
+    "brand": "Velocity",
+    "price": 54.0,
+    "attributes": { "color": "Grey", "pieces": 4, "weight_g": 420, "material": "Anodized Aluminium" },
+    "tags": ["cookware", "pots", "cooking", "camping", "kitchen"],
+    "image_url": "https://images.unsplash.com/photo-1605379399642-870262d3d051?w=600"
+  },
+  {
+    "sku": "RF-ACC-001",
+    "name": "Lumen 400 Rechargeable Headlamp",
+    "description": "USB-C rechargeable headlamp with 400 lumens, a red night mode, and a lock-out to prevent accidental drain. Essential for camp chores and night hikes.",
+    "category": "Accessories",
+    "brand": "Velocity",
+    "price": 39.0,
+    "attributes": { "color": "Black", "lumens": 400, "rechargeable": true, "weight_g": 86 },
+    "tags": ["headlamp", "light", "camping", "rechargeable", "night"],
+    "image_url": "https://images.unsplash.com/photo-1589782182703-2aaa69037b5b?w=600"
+  },
+  {
+    "sku": "RF-ACC-002",
+    "name": "PureFlow Squeeze Water Filter",
+    "description": "Hollow-fiber squeeze water filter that removes 99.99% of bacteria and protozoa. Screws onto standard bottles so you can drink straight from streams.",
+    "category": "Accessories",
+    "brand": "Trailhead",
+    "price": 34.0,
+    "attributes": { "color": "Blue", "flow_rate_lpm": 1.5, "weight_g": 60, "filter_microns": 0.1 },
+    "tags": ["water filter", "purification", "camping", "hydration", "safety"],
+    "image_url": "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600"
+  },
+  {
+    "sku": "RF-ACC-003",
+    "name": "Carbon Z Folding Trekking Poles",
+    "description": "Lightweight carbon trekking poles that fold to 38 cm and lock instantly. Cork grips wick sweat; carbide tips bite on rock and ice.",
+    "category": "Accessories",
+    "brand": "Velocity",
+    "price": 99.0,
+    "attributes": { "color": "Carbon", "material": "Carbon Fiber", "weight_g": 480, "foldable": true },
+    "tags": ["trekking poles", "hiking", "carbon", "lightweight", "support"],
+    "image_url": "https://images.unsplash.com/photo-1454942901704-3c44c11b2ad1?w=600"
+  },
+  {
+    "sku": "RF-BAG-001",
+    "name": "Voyager 65L Backpacking Pack",
+    "description": "Adjustable 65-litre internal-frame backpack with a ventilated back panel, rain cover, and load-lifting hip belt. Carries multi-day loads in comfort.",
+    "category": "Backpacks",
+    "brand": "Northpeak",
+    "price": 199.0,
+    "attributes": { "color": "Granite Grey", "capacity_l": 65, "weight_g": 1950, "rain_cover": true },
+    "tags": ["backpack", "pack", "backpacking", "65l", "multi-day"],
+    "image_url": "https://images.unsplash.com/photo-1622260614153-03223fb72052?w=600"
+  },
+  {
+    "sku": "RF-BAG-002",
+    "name": "Trailmate 18L Hydration Daypack",
+    "description": "Compact 18-litre daypack with an included 2L hydration reservoir and a sternum strap. Perfect for day hikes, trail runs, and travel.",
+    "category": "Backpacks",
+    "brand": "Velocity",
+    "price": 79.0,
+    "attributes": { "color": "Red", "capacity_l": 18, "weight_g": 540, "reservoir_l": 2 },
+    "tags": ["daypack", "hydration", "backpack", "day hike", "running"],
+    "image_url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600"
+  },
+  {
+    "sku": "RF-ELE-001",
+    "name": "SunCell 21W Portable Solar Charger",
+    "description": "Foldable 21-watt solar panel with dual USB outputs to recharge phones, headlamps, and power banks off-grid. Weather-resistant for multi-day trips.",
+    "category": "Electronics",
+    "brand": "Velocity",
+    "price": 69.0,
+    "attributes": { "color": "Black", "watts": 21, "outputs": 2, "weight_g": 510 },
+    "tags": ["solar", "charger", "electronics", "off-grid", "power"],
+    "image_url": "https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=600"
+  },
+  {
+    "sku": "RF-ELE-002",
+    "name": "PowerRock 20000mAh Rugged Power Bank",
+    "description": "Shockproof and splash-resistant 20000mAh power bank with fast USB-C PD charging and a built-in flashlight. Keeps devices alive for a long weekend.",
+    "category": "Electronics",
+    "brand": "Velocity",
+    "price": 49.0,
+    "attributes": { "color": "Black/Yellow", "capacity_mah": 20000, "usb_c_pd": true, "weight_g": 360 },
+    "tags": ["power bank", "battery", "electronics", "charging", "rugged"],
+    "image_url": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=600"
+  },
+  {
+    "sku": "RF-ACC-004",
+    "name": "Trailguard Compact First Aid Kit",
+    "description": "Lightweight 90-piece first aid kit in a water-resistant zip case, covering blisters, cuts, and sprains. A must-have safety item for any outing.",
+    "category": "Accessories",
+    "brand": "Trailhead",
+    "price": 29.0,
+    "attributes": { "color": "Red", "pieces": 90, "weight_g": 280, "water_resistant": true },
+    "tags": ["first aid", "safety", "kit", "medical", "camping"],
+    "image_url": "https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=600"
+  }
+]

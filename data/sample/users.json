@@ -1,0 +1,26 @@
+[
+  {
+    "user_id": "USER-1001",
+    "name": "Demo Shopper",
+    "email": "demo@retailforge.test",
+    "preferences": ["backpacking", "ultralight", "cold-weather"],
+    "loyalty_tier": "Gold",
+    "purchase_history": ["ORD-5001", "ORD-5002"]
+  },
+  {
+    "user_id": "USER-1002",
+    "name": "Ava Martinez",
+    "email": "ava.martinez@retailforge.test",
+    "preferences": ["trail-running", "day-hikes"],
+    "loyalty_tier": "Silver",
+    "purchase_history": ["ORD-5003"]
+  },
+  {
+    "user_id": "USER-1003",
+    "name": "Liam Chen",
+    "email": "liam.chen@retailforge.test",
+    "preferences": ["car-camping", "family"],
+    "loyalty_tier": "Bronze",
+    "purchase_history": ["ORD-5004"]
+  }
+]

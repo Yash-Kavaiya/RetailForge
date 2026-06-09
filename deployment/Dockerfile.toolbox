@@ -1,0 +1,7 @@
+# MCP Toolbox image with the RetailForge tools.yaml baked in, for Cloud Run.
+# Binds to $PORT (Cloud Run sets it to 8080); defaults to 5000 locally.
+FROM us-central1-docker.pkg.dev/database-toolbox/toolbox/toolbox:latest
+
+COPY toolbox/tools.yaml /config/tools.yaml
+
+ENTRYPOINT ["sh", "-c", "/toolbox --tools-file /config/tools.yaml --address 0.0.0.0 --port ${PORT:-5000}"]
