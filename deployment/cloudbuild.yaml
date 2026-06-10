@@ -30,3 +30,6 @@ images:
 
 options:
   machineType: E2_HIGHCPU_8
+  # Route logs to Cloud Logging so a non-Viewer submitter (the CI service
+  # account) can stream build logs without access to the GCS log bucket.
+  logging: CLOUD_LOGGING_ONLY
