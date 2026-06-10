@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #ffffff;
+  --foreground: #0a0a0a;
 }
 
 html,
@@ -15,11 +15,30 @@ body {
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Give the CopilotKit sidebar a brand accent. */
-.copilotKitWindow {
-  --copilot-kit-primary-color: #059669;
+/* Hide horizontal scrollbars on product rails while keeping scroll. */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Brand the CopilotKit concierge to match the storefront. */
+.copilotKitWindow,
+.copilotKitSidebar {
+  --copilot-kit-primary-color: #e11b30;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .container-store {
+    @apply mx-auto max-w-store px-4 sm:px-6 lg:px-8;
+  }
 }

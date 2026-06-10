@@ -11,7 +11,16 @@ export interface Product {
   score?: number;
   signal?: number;
   in_stock?: boolean;
+  rating?: number | null;
+  review_count?: number;
   inventory?: { qty_on_hand: number; aisle?: string; reorder_level?: number } | null;
+}
+
+export interface Review {
+  sku: string;
+  user_id: string;
+  rating: number;
+  text: string;
 }
 
 export interface OrderItem {

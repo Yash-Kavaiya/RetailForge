@@ -62,7 +62,7 @@ export function KitBuilder({ kit }: { kit?: Kit }) {
           <span>{formatPrice(kit.subtotal)}</span>
         </div>
         {kit.promotion && (kit.discount ?? 0) > 0 && (
-          <div className="flex justify-between text-forge-700">
+          <div className="flex justify-between text-brand-700">
             <span>{kit.promotion.code} discount</span>
             <span>−{formatPrice(kit.discount)}</span>
           </div>
@@ -74,7 +74,7 @@ export function KitBuilder({ kit }: { kit?: Kit }) {
       </div>
       <button
         onClick={() => kit.items?.forEach((it) => add(it))}
-        className="mt-3 w-full rounded-lg bg-forge-600 py-2 text-sm font-semibold text-white hover:bg-forge-700"
+        className="mt-3 w-full rounded-lg bg-brand-600 py-2 text-sm font-semibold text-white hover:bg-brand-700"
       >
         Add kit to cart
       </button>

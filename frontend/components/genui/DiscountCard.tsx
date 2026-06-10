@@ -22,16 +22,16 @@ export function DiscountCard({ discount }: { discount?: Discount }) {
     );
   }
   return (
-    <div className="my-2 rounded-xl border border-forge-100 bg-forge-50 p-3 shadow-sm">
-      <p className="text-sm font-semibold text-forge-700">
+    <div className="my-2 rounded-xl border border-brand-100 bg-brand-50 p-3 shadow-sm">
+      <p className="text-sm font-semibold text-brand-700">
         🏷️ {discount.code} applied
       </p>
       {discount.promotion?.description && (
-        <p className="mt-0.5 text-xs text-forge-700/80">{discount.promotion.description}</p>
+        <p className="mt-0.5 text-xs text-brand-700/80">{discount.promotion.description}</p>
       )}
       <div className="mt-2 flex justify-between text-sm">
         <span className="text-slate-600">You save</span>
-        <span className="font-semibold text-forge-700">−{formatPrice(discount.discount)}</span>
+        <span className="font-semibold text-brand-700">−{formatPrice(discount.discount)}</span>
       </div>
       <div className="flex justify-between text-base font-bold text-slate-900">
         <span>New total</span>

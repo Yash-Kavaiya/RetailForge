@@ -29,7 +29,7 @@ export function OrderConfirmation({ order }: { order?: Order }) {
       </ul>
       <div className="mt-2 space-y-1 border-t border-emerald-200 pt-2 text-sm">
         {(order.discount ?? 0) > 0 && (
-          <div className="flex justify-between text-forge-700">
+          <div className="flex justify-between text-brand-700">
             <span>Discount{order.discount_code ? ` (${order.discount_code})` : ""}</span>
             <span>−{formatPrice(order.discount)}</span>
           </div>

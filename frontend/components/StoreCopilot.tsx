@@ -27,8 +27,8 @@ function parse<T = any>(result: unknown): T | undefined {
 
 function Working({ label }: { label: string }) {
   return (
-    <div className="my-2 flex items-center gap-2 rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
-      <span className="h-2 w-2 animate-pulse rounded-full bg-forge-500" />
+    <div className="my-2 flex items-center gap-2 rounded-lg bg-surface-muted px-3 py-2 text-sm text-ink/60">
+      <span className="h-2 w-2 animate-pulse rounded-full bg-brand-500" />
       {label}
     </div>
   );
@@ -120,9 +120,9 @@ export function StoreCopilot() {
       defaultOpen={false}
       clickOutsideToClose={false}
       labels={{
-        title: "RetailForge Concierge",
+        title: "Personal Shopper",
         initial:
-          "Hi! I can help you find gear, recommend add-ons, check orders, issue refunds, and build discounted kits. Try: \"Find a waterproof jacket under $100\" or \"Build me a weekend camping kit with a discount.\"",
+          "Hi, I'm your RetailForge Personal Shopper. I can help you find styles, suggest pairings, check orders, start returns, and build discounted bundles. Try: \"Find a waterproof jacket under $100\" or \"Build me a weekend kit with a discount.\"",
       }}
     />
   );
