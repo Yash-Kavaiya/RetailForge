@@ -15,6 +15,21 @@ These agents take **real actions** — checking live inventory, creating orders,
 
 ---
 
+## 🚀 Live demo
+
+Deployed to Google Cloud Run (project `genaiguruyoutube`, region `us-central1`) automatically by the [CI/CD pipeline](#cicd-github-actions).
+
+| Service | URL |
+|---|---|
+| 🛍️ **Storefront** (start here) | https://retailforge-frontend-awghszkm2a-uc.a.run.app |
+| 🤖 Agent backend (AG-UI) | https://retailforge-backend-awghszkm2a-uc.a.run.app |
+| 📦 Storefront read API | https://retailforge-read-api-awghszkm2a-uc.a.run.app |
+| 🔌 MCP Toolbox | https://retailforge-toolbox-awghszkm2a-uc.a.run.app |
+
+Open the storefront and click the **RetailForge Concierge** (bottom-right) to talk to the agents.
+
+---
+
 ## Architecture
 
 ```
@@ -131,6 +146,10 @@ toolbox/tools.yaml    MCP Toolbox: mongodb source + tools + 4 toolsets
 data/                 sample retail data + seed.py (embeddings + Atlas indexes)
 frontend/             Next.js + CopilotKit storefront (generative UI)
 deployment/           Dockerfiles, Terraform (Cloud Run x4), Cloud Build
+  terraform/          main.tf + GCS remote-state backend.tf
+scripts/setup-cicd.sh one-time WIF + deployer SA + state-bucket setup
+.github/workflows/    deploy.yml — test → build → deploy CI/CD
+docs/cicd.md          CI/CD setup + operations runbook
 tests/                pytest logic tests (toolbox/embeddings mocked)
 ```
 
@@ -138,13 +157,46 @@ tests/                pytest logic tests (toolbox/embeddings mocked)
 
 ## Deployment (Cloud Run)
 
+Two paths: a one-shot **manual** deploy, or the **automated CI/CD pipeline** (recommended).
+
+Either way, Terraform provisions four Cloud Run services — **toolbox**, **agent backend**, **read API**, and **storefront** — with `MONGODB_URI` / `GOOGLE_API_KEY` stored in **Secret Manager**. Images are built by **Cloud Build** and pushed to **Artifact Registry** (`<region>-docker.pkg.dev/<project>/retailforge`). Run `make seed` against the same Atlas cluster once.
+
+> **MongoDB Atlas network access:** Cloud Run egresses from dynamic Google IPs, so the Atlas cluster's **Network Access** list must allow them. For a demo, add `0.0.0.0/0`; for production, give Cloud Run a static egress IP (VPC connector + Cloud NAT) and allowlist just that IP.
+
+> **Security note:** the Terraform makes all services public (`allUsers` invoker) for demo simplicity — tighten IAM/ingress for production (see `deployment/terraform/main.tf`).
+
+### Manual one-shot
+
 ```bash
 export PROJECT_ID=your-project REGION=us-central1
 export MONGODB_URI='mongodb+srv://...'  GOOGLE_API_KEY='...'
 bash deployment/deploy.sh        # builds 3 images, provisions 4 Cloud Run services
 ```
 
-Provisions, via Terraform: **toolbox**, **agent backend**, **read API**, and **storefront** services, with `MONGODB_URI` / `GOOGLE_API_KEY` in Secret Manager. Run `make seed` against the same cluster once. The Terraform makes services public for demo simplicity — tighten IAM/ingress for production (see `deployment/terraform/main.tf`).
+### CI/CD (GitHub Actions)
+
+`.github/workflows/deploy.yml` runs on every push:
+
+| Event | Jobs |
+|---|---|
+| Pull request → `main` | `test` (ruff + pytest) |
+| Push → `main` / manual dispatch | `test` → `build` → `deploy` |
+
+- **Keyless auth** to GCP via **Workload Identity Federation** — no service-account JSON keys.
+- **Images tagged with the commit SHA** (plus `latest`) for traceable rollbacks.
+- **Terraform state** lives in a GCS bucket so applies are repeatable across runs.
+
+One-time setup creates the WIF pool/provider, a deployer service account, and the state bucket:
+
+```bash
+PROJECT_ID=your-project REGION=us-central1 \
+GITHUB_REPO=owner/RetailForge \
+bash scripts/setup-cicd.sh        # prints the `gh secret set` commands to run next
+```
+
+Required repo secrets: `GCP_PROJECT_ID`, `GCP_REGION`, `WIF_PROVIDER`, `WIF_SERVICE_ACCOUNT`, `MONGODB_URI`, `GOOGLE_API_KEY`.
+
+Full setup, secrets, trigger, and rollback runbook: [`docs/cicd.md`](docs/cicd.md).
 
 ---
 
