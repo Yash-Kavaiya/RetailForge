@@ -126,7 +126,12 @@ resource "google_cloud_run_v2_service" "backend" {
       }
     }
   }
-  depends_on = [google_secret_manager_secret_version.google_api_key]
+  # The backend loads MCP tools from the toolbox at startup, so the toolbox
+  # must be publicly invokable before this container boots.
+  depends_on = [
+    google_secret_manager_secret_version.google_api_key,
+    google_cloud_run_v2_service_iam_member.toolbox_public,
+  ]
 }
 
 # --- Storefront read API ------------------------------------------------------
@@ -175,9 +180,17 @@ resource "google_cloud_run_v2_service" "frontend" {
 }
 
 # --- Public access (demo). Tighten these for production. ----------------------
+# Toolbox is broken out so the backend can depend_on its public binding being
+# in place before it boots (the backend calls the toolbox at startup).
+resource "google_cloud_run_v2_service_iam_member" "toolbox_public" {
+  name     = google_cloud_run_v2_service.toolbox.name
+  location = var.region
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
 resource "google_cloud_run_v2_service_iam_member" "public" {
   for_each = {
-    toolbox  = google_cloud_run_v2_service.toolbox.name
     backend  = google_cloud_run_v2_service.backend.name
     read_api = google_cloud_run_v2_service.read_api.name
     frontend = google_cloud_run_v2_service.frontend.name
