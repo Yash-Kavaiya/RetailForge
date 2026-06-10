@@ -35,7 +35,9 @@ resource "google_project_service" "apis" {
 # --- Secrets ------------------------------------------------------------------
 resource "google_secret_manager_secret" "mongodb_uri" {
   secret_id = "retailforge-mongodb-uri"
-  replication { auto {} }
+  replication {
+    auto {}
+  }
   depends_on = [google_project_service.apis]
 }
 
@@ -46,7 +48,9 @@ resource "google_secret_manager_secret_version" "mongodb_uri" {
 
 resource "google_secret_manager_secret" "google_api_key" {
   secret_id = "retailforge-google-api-key"
-  replication { auto {} }
+  replication {
+    auto {}
+  }
   depends_on = [google_project_service.apis]
 }
 
