@@ -1,0 +1,42 @@
+---
+title: RetailForge — Cloud Run System Architecture
+---
+flowchart TB
+    user([Shopper · Browser]):::user
+
+    subgraph GCP["Google Cloud · us-central1"]
+        direction TB
+
+        subgraph Edge["Public Cloud Run services"]
+            direction LR
+            fe["retailforge-frontend<br/><b>Next.js 15 + CopilotKit</b>"]:::svc
+            be["retailforge-backend<br/><b>FastAPI · AG-UI agent server</b>"]:::svc
+            read["retailforge-read-api<br/><b>FastAPI · catalog & orders</b>"]:::svc
+            tb["retailforge-toolbox<br/><b>MCP Toolbox · 24 tools</b>"]:::tool
+        end
+
+        sm[("Secret Manager<br/>MongoDB URI · Gemini key")]:::infra
+        ar[("Artifact Registry<br/>container images")]:::infra
+    end
+
+    gem["Gemini 2.5 Flash<br/>+ gemini-embedding-001"]:::ai
+    mdb[("MongoDB Atlas<br/>products · inventory · orders<br/>+ Vector Search index")]:::data
+
+    user -->|HTTPS| fe
+    fe -->|"AG-UI / SSE"| be
+    fe -->|"REST catalog"| read
+    be -->|"reason / embed"| gem
+    be -->|"declared tool calls"| tb
+    tb -->|"scoped queries"| mdb
+    read -->|"read-only"| mdb
+    sm -. injected .-> be
+    sm -. injected .-> read
+    sm -. injected .-> tb
+    ar -. images .-> Edge
+
+    classDef user fill:#0a0a0a,stroke:#0a0a0a,color:#ffffff,font-weight:bold;
+    classDef svc fill:#ffffff,stroke:#e11b30,stroke-width:2px,color:#0a0a0a;
+    classDef tool fill:#e11b30,stroke:#a00c1d,stroke-width:2px,color:#ffffff,font-weight:bold;
+    classDef data fill:#0a0a0a,stroke:#0a0a0a,color:#ffffff;
+    classDef ai fill:#fff0f1,stroke:#e11b30,stroke-width:2px,color:#0a0a0a;
+    classDef infra fill:#f6f6f6,stroke:#c9c9c9,color:#2b2b2b;

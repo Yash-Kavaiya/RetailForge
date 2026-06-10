@@ -1,0 +1,32 @@
+---
+title: RetailForge — Multi-Agent Orchestration
+---
+flowchart TB
+    shopper([Shopper intent]):::user
+    root["<b>RetailForgeConcierge</b><br/>Root orchestrator · Google ADK<br/>routes intent to a specialist"]:::root
+
+    pa["<b>ProductAdvisor</b><br/>semantic search ·<br/>details · live stock"]:::agent
+    rec["<b>RecommendationAgent</b><br/>also-bought · trending ·<br/>history-aware picks"]:::agent
+    cs["<b>CustomerSupport</b><br/>order status ·<br/>cancellations · refunds"]:::agent
+    bill["<b>BillingAgent</b><br/>kit building · discounts ·<br/>order placement"]:::agent
+
+    box["<b>MCP Toolbox</b> — single safe data gateway<br/>24 declared MongoDB tools · no direct DB access"]:::tool
+    mdb[("MongoDB Atlas")]:::data
+
+    shopper --> root
+    root -->|transfer_to_agent| pa
+    root -->|transfer_to_agent| rec
+    root -->|transfer_to_agent| cs
+    root -->|transfer_to_agent| bill
+
+    pa --> box
+    rec --> box
+    cs --> box
+    bill --> box
+    box --> mdb
+
+    classDef user fill:#0a0a0a,stroke:#0a0a0a,color:#ffffff,font-weight:bold;
+    classDef root fill:#e11b30,stroke:#a00c1d,stroke-width:2px,color:#ffffff;
+    classDef agent fill:#ffffff,stroke:#e11b30,stroke-width:2px,color:#0a0a0a;
+    classDef tool fill:#fff0f1,stroke:#e11b30,stroke-width:2px,color:#0a0a0a,font-weight:bold;
+    classDef data fill:#0a0a0a,stroke:#0a0a0a,color:#ffffff;

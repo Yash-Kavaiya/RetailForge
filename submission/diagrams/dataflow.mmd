@@ -1,0 +1,26 @@
+---
+title: RetailForge — Semantic Search & Action Data Flow
+---
+sequenceDiagram
+    autonumber
+    actor U as Shopper
+    participant FE as Next.js + CopilotKit
+    participant RT as Root Concierge (ADK)
+    participant SP as Specialist Agent
+    participant EM as Gemini Embeddings
+    participant TB as MCP Toolbox
+    participant DB as MongoDB Atlas
+
+    U->>FE: "Find a waterproof jacket under $100"
+    FE->>RT: AG-UI event (SSE)
+    RT->>SP: transfer_to_agent (ProductAdvisor)
+    SP->>EM: embed query (gemini-embedding-001, 3072-d)
+    EM-->>SP: query vector
+    SP->>TB: find-similar-products(vector, filters)
+    TB->>DB: $vectorSearch on products.embedding
+    DB-->>TB: top-k matches + scores
+    TB-->>SP: ranked products
+    SP-->>FE: stream generative-UI product cards
+    FE-->>U: rich result + "Add to Bag"
+
+    Note over SP,DB: Writes (create order, decrement<br/>inventory, refund) flow the same path —<br/>only through declared Toolbox tools.

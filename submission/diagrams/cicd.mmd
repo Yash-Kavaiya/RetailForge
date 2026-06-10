@@ -1,0 +1,29 @@
+---
+title: RetailForge — CI/CD Pipeline
+---
+flowchart LR
+    dev([git push → main]):::user
+
+    subgraph GHA["GitHub Actions"]
+        direction TB
+        test["<b>Test</b><br/>ruff lint + pytest<br/>(mongomock)"]:::step
+        build["<b>Build</b><br/>Cloud Build · 3 images<br/>tagged with commit SHA"]:::step
+        deploy["<b>Deploy</b><br/>Terraform apply<br/>remote state in GCS"]:::step
+        test --> build --> deploy
+    end
+
+    wif{{"Workload Identity Federation<br/>keyless auth — no JSON keys"}}:::auth
+    ar[("Artifact Registry")]:::infra
+    run["4 Cloud Run services<br/>frontend · backend · read-api · toolbox"]:::svc
+
+    dev --> test
+    build -->|push| ar
+    GHA -.authenticates via.-> wif
+    deploy -->|images + env| run
+    ar -. pulled by .-> run
+
+    classDef user fill:#0a0a0a,stroke:#0a0a0a,color:#ffffff,font-weight:bold;
+    classDef step fill:#ffffff,stroke:#e11b30,stroke-width:2px,color:#0a0a0a;
+    classDef auth fill:#fff7d6,stroke:#f5a623,stroke-width:2px,color:#2b2b2b;
+    classDef infra fill:#f6f6f6,stroke:#c9c9c9,color:#2b2b2b;
+    classDef svc fill:#e11b30,stroke:#a00c1d,stroke-width:2px,color:#ffffff,font-weight:bold;
