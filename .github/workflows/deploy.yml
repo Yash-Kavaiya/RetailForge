@@ -1,0 +1,97 @@
+name: CI/CD — Cloud Run
+
+# PR -> test only. Push to main / manual -> test, build, deploy.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Lint & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: uv sync --extra dev
+      - name: Ruff
+        run: uv run ruff check .
+      - name: Pytest
+        run: uv run pytest -q
+
+  build:
+    name: Build & push images
+    needs: test
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for Workload Identity Federation
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+      - name: Build & push 3 images (Cloud Build)
+        run: |
+          PREFIX="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/retailforge"
+          gcloud builds submit . \
+            --project "${{ secrets.GCP_PROJECT_ID }}" \
+            --config deployment/cloudbuild.yaml \
+            --substitutions "_IMAGE_PREFIX=${PREFIX},_TAG=${GITHUB_SHA}"
+
+  deploy:
+    name: Deploy to Cloud Run (Terraform)
+    needs: build
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: deployment/terraform
+    env:
+      TF_VAR_mongodb_uri: ${{ secrets.MONGODB_URI }}
+      TF_VAR_google_api_key: ${{ secrets.GOOGLE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform init
+        run: terraform init -input=false
+      - name: Terraform apply
+        run: |
+          PREFIX="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/retailforge"
+          terraform apply -input=false -auto-approve \
+            -var "project_id=${{ secrets.GCP_PROJECT_ID }}" \
+            -var "region=${{ secrets.GCP_REGION }}" \
+            -var "toolbox_image=${PREFIX}/toolbox:${GITHUB_SHA}" \
+            -var "backend_image=${PREFIX}/backend:${GITHUB_SHA}" \
+            -var "frontend_image=${PREFIX}/frontend:${GITHUB_SHA}"
+      - name: Storefront URL
+        run: |
+          echo "### 🚀 Deployed" >> "$GITHUB_STEP_SUMMARY"
+          echo "Storefront: $(terraform output -raw frontend_url)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Backend:    $(terraform output -raw backend_url)" >> "$GITHUB_STEP_SUMMARY"

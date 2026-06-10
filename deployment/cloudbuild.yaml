@@ -1,20 +1,31 @@
 # Builds and pushes the three RetailForge images to Artifact Registry.
 #   gcloud builds submit --config deployment/cloudbuild.yaml \
-#     --substitutions=_IMAGE_PREFIX=us-central1-docker.pkg.dev/PROJECT/retailforge
+#     --substitutions=_IMAGE_PREFIX=us-central1-docker.pkg.dev/PROJECT/retailforge,_TAG=$(git rev-parse HEAD)
+# _TAG defaults to "latest"; CI passes the commit SHA so images are rollbackable.
 substitutions:
   _IMAGE_PREFIX: "us-central1-docker.pkg.dev/PROJECT_ID/retailforge"
+  _TAG: "latest"
 
 steps:
   - name: gcr.io/cloud-builders/docker
-    args: ["build", "-f", "deployment/Dockerfile.toolbox", "-t", "${_IMAGE_PREFIX}/toolbox:latest", "."]
+    args: ["build", "-f", "deployment/Dockerfile.toolbox",
+           "-t", "${_IMAGE_PREFIX}/toolbox:${_TAG}",
+           "-t", "${_IMAGE_PREFIX}/toolbox:latest", "."]
   - name: gcr.io/cloud-builders/docker
-    args: ["build", "-f", "deployment/Dockerfile.backend", "-t", "${_IMAGE_PREFIX}/backend:latest", "."]
+    args: ["build", "-f", "deployment/Dockerfile.backend",
+           "-t", "${_IMAGE_PREFIX}/backend:${_TAG}",
+           "-t", "${_IMAGE_PREFIX}/backend:latest", "."]
   - name: gcr.io/cloud-builders/docker
-    args: ["build", "-f", "deployment/Dockerfile.frontend", "-t", "${_IMAGE_PREFIX}/frontend:latest", "."]
+    args: ["build", "-f", "deployment/Dockerfile.frontend",
+           "-t", "${_IMAGE_PREFIX}/frontend:${_TAG}",
+           "-t", "${_IMAGE_PREFIX}/frontend:latest", "."]
 
 images:
+  - "${_IMAGE_PREFIX}/toolbox:${_TAG}"
   - "${_IMAGE_PREFIX}/toolbox:latest"
+  - "${_IMAGE_PREFIX}/backend:${_TAG}"
   - "${_IMAGE_PREFIX}/backend:latest"
+  - "${_IMAGE_PREFIX}/frontend:${_TAG}"
   - "${_IMAGE_PREFIX}/frontend:latest"
 
 options:
